@@ -1,5 +1,0 @@
-# ninja log v6
-1	988	1732491934586907206	CMakeFiles/main.dir/src/frame_buffer.cpp.o	77611755735ffdc0
-1	1332	1732491934586907206	CMakeFiles/main.dir/src/matching_2d.cpp.o	e9fa9ac02022d5e4
-1	3667	1732491934586907206	CMakeFiles/main.dir/src/main.cpp.o	4215fe691d54e2ad
-3667	3915	1732491938252860455	main	5bbd68f12effbda7

@@ -1,0 +1,21 @@
+.cache/
+
+# ZedEditor
+.zed/
+
+# JetBrains CLion
+.idea/
+
+# VSCode
+.vscode/
+
+# CMake
+build/
+cmake-build-debug/
+
+# macOS
+.DS_Store
+
+# pixi environments
+.pixi
+*.egg-info
