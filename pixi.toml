@@ -1,0 +1,35 @@
+[project]
+authors = ["Alvaro <alvgaona@gmail.com>"]
+channels = ["conda-forge"]
+description = "A 2D feature matching sample app using OpenCV to detect and match features between images"
+name = "2d-feature-matching"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+build = { cmd = [
+  "mkdir",
+  "-p",
+  "build",
+  "&&",
+  "cd",
+  "build",
+  "&&",
+  "cmake",
+  "-G",
+  "Ninja",
+  "..",
+  "&&",
+  "ninja",
+] }
+clean = "rm -rf build/"
+clean-build = { depends-on = ["clean", "build"] }
+start = "./build/main"
+
+[dependencies]
+opencv = ">=4.10.0,<5"
+cmake = ">=3.31.1,<4"
+ninja = ">=1.12.1,<2"
+pkg-config = ">=0.29.2,<0.30"
+librerun-sdk = ">=0.20.0,<0.21"
+eigen = ">=3.4.0,<4"
