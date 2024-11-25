@@ -12,3 +12,28 @@ across different methods.
 The project is integrated with Rerun.io, a visualization toolkit
 that enables real-time inspection of the feature detection and matching process, making
 it easier to debug and understand the behavior of different detector/descriptor combinations.
+
+## Prerequisites
+
+- https://pixi.sh
+- https://rerun.io
+
+## Usage
+
+1. Install dependencies
+
+```sh
+pixi install
+```
+
+2. Build the app
+
+```sh
+pixi run build
+```
+
+3. Start the app
+
+```sh
+pixi run start
+```
