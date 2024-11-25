@@ -1,7 +1,9 @@
 # 2D Feature Tracking
 
 <div align="center">
-  <img src="img/feature-matching-rerun.gif" width="500" alt="Feature matching with Rerun.io"/>
+  <video width="100%" controls>
+    <source src="img/feature-matching-rerun.mp4" type="video/mp4">
+  </video>
 </div>
 
 This project demonstrates 2D feature matching using a sequence of images from the KITTI
