@@ -1,0 +1,12 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+ColumnLimit: 80
+ContinuationIndentWidth: 2
+ConstructorInitializerIndentWidth: 2
+BinPackArguments: false
+BinPackParameters: false
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllArgumentsOnNextLine: true
+AlignAfterOpenBracket: BlockIndent
+NamespaceIndentation: All

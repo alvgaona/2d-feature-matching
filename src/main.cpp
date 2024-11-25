@@ -38,14 +38,14 @@ int main() {
   const auto rec = rerun::RecordingStream("feature_tracking");
   rec.spawn().exit_on_failure();
 
-  for (const auto& entry :
-       fs::directory_iterator("./images/KITTI/2011_09_26/image_00/data")) {
+  for (const auto &entry :
+       fs::directory_iterator("./dataset/KITTI/2011_09_26/image_00/data")) {
     img_paths.push_back(entry.path());
   }
 
   std::sort(img_paths.begin(), img_paths.end());
 
-  for (const auto& img_path : img_paths) {
+  for (const auto &img_path : img_paths) {
     cv::Mat img = cv::imread(img_path.string(), cv::IMREAD_GRAYSCALE);
 
     DataFrame frame;
@@ -115,9 +115,9 @@ int main() {
       std::vector<rerun::Position2D> points_2d_prev(matches.size());
       std::vector<rerun::LineStrip2D> match_edges(matches.size() / 2);
 
-      for (const auto& match : matches) {
-        const auto& prev_kp = prev_frame.keypoints[match.trainIdx];
-        const auto& curr_kp = curr_frame.keypoints[match.queryIdx];
+      for (const auto &match : matches) {
+        const auto &prev_kp = prev_frame.keypoints[match.trainIdx];
+        const auto &curr_kp = curr_frame.keypoints[match.queryIdx];
 
         points_2d_prev.emplace_back(prev_kp.pt.x, prev_kp.pt.y);
         points_2d_curr.emplace_back(
