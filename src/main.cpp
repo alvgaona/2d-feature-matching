@@ -38,14 +38,14 @@ int main() {
   const auto rec = rerun::RecordingStream("feature_tracking");
   rec.spawn().exit_on_failure();
 
-  for (const auto& entry :
-       fs::directory_iterator("./images/KITTI/2011_09_26/image_00/data")) {
+  for (const auto &entry :
+       fs::directory_iterator("./dataset/KITTI/2011_09_26/image_00/data")) {
     img_paths.push_back(entry.path());
   }
 
   std::sort(img_paths.begin(), img_paths.end());
 
-  for (const auto& img_path : img_paths) {
+  for (const auto &img_path : img_paths) {
     cv::Mat img = cv::imread(img_path.string(), cv::IMREAD_GRAYSCALE);
 
     DataFrame frame;
@@ -75,24 +75,17 @@ int main() {
 
     cv::Mat descriptors;
 
-    DescribeKeypoints(
-      frame_buffer.begin()->keypoints,
-      frame_buffer.begin()->image,
-      descriptors,
-      descriptor_type
-    );
+    DescribeKeypoints(frame_buffer.begin()->keypoints,
+                      frame_buffer.begin()->image, descriptors,
+                      descriptor_type);
 
     frame_buffer.begin()->descriptors = descriptors;
 
     if (frame_buffer.size() > 1) {
       std::vector<cv::DMatch> matches;
-      MatchDescriptors(
-        (frame_buffer.begin() + 1)->descriptors,
-        frame_buffer.begin()->descriptors,
-        matches,
-        matcher_type,
-        selector_type
-      );
+      MatchDescriptors((frame_buffer.begin() + 1)->descriptors,
+                       frame_buffer.begin()->descriptors, matches, matcher_type,
+                       selector_type);
 
       frame_buffer.begin()->keypoints_matches = matches;
 
@@ -100,13 +93,9 @@ int main() {
       auto prev_frame = frame_buffer.at(0);
       auto curr_frame = frame_buffer.at(1);
 
-      rec.log(
-        "logs",
-        rerun::TextLog(
-          "Number of matches found: " + std::to_string(matches.size())
-        )
-          .with_level(rerun::TextLogLevel::Info)
-      );
+      rec.log("logs", rerun::TextLog("Number of matches found: " +
+                                     std::to_string(matches.size()))
+                          .with_level(rerun::TextLogLevel::Info));
 
       uint32_t width = prev_frame.image.cols;
       uint32_t height = prev_frame.image.rows;
@@ -115,48 +104,37 @@ int main() {
       std::vector<rerun::Position2D> points_2d_prev(matches.size());
       std::vector<rerun::LineStrip2D> match_edges(matches.size() / 2);
 
-      for (const auto& match : matches) {
-        const auto& prev_kp = prev_frame.keypoints[match.trainIdx];
-        const auto& curr_kp = curr_frame.keypoints[match.queryIdx];
+      for (const auto &match : matches) {
+        const auto &prev_kp = prev_frame.keypoints[match.trainIdx];
+        const auto &curr_kp = curr_frame.keypoints[match.queryIdx];
 
         points_2d_prev.emplace_back(prev_kp.pt.x, prev_kp.pt.y);
-        points_2d_curr.emplace_back(
-          curr_kp.pt.x + static_cast<float>(width), curr_kp.pt.y
-        );
+        points_2d_curr.emplace_back(curr_kp.pt.x + static_cast<float>(width),
+                                    curr_kp.pt.y);
         match_edges.push_back(rerun::LineStrip2D({
-          rerun::Position2D(prev_kp.pt.x, prev_kp.pt.y),
-          rerun::Position2D(
-            curr_kp.pt.x + static_cast<float>(width), curr_kp.pt.y
-          ),
+            rerun::Position2D(prev_kp.pt.x, prev_kp.pt.y),
+            rerun::Position2D(curr_kp.pt.x + static_cast<float>(width),
+                              curr_kp.pt.y),
         }));
       }
 
       cv::Mat concat_image;
-      cv::hconcat(
-        frame_buffer.begin()->image,
-        (frame_buffer.begin() + 1)->image,
-        concat_image
-      );
-      rec.log(
-        "matches/image",
-        rerun::Image::from_greyscale8(concat_image, {width * 2, height})
-      );
+      cv::hconcat(frame_buffer.begin()->image,
+                  (frame_buffer.begin() + 1)->image, concat_image);
+      rec.log("matches/image",
+              rerun::Image::from_greyscale8(concat_image, {width * 2, height}));
 
       rec.log(
-        "matches/image/prev/keypoints",
-        rerun::Points2D(points_2d_prev).with_colors(rerun::Color(255, 0, 0))
-      );
+          "matches/image/prev/keypoints",
+          rerun::Points2D(points_2d_prev).with_colors(rerun::Color(255, 0, 0)));
       rec.log(
-        "matches/image/curr/keypoints",
-        rerun::Points2D(points_2d_curr).with_colors(rerun::Color(0, 0, 255))
-      );
+          "matches/image/curr/keypoints",
+          rerun::Points2D(points_2d_curr).with_colors(rerun::Color(0, 0, 255)));
 
-      rec.log(
-        "matches/image/edges",
-        rerun::LineStrips2D(match_edges)
-          .with_radii(0.1f)
-          .with_colors(rerun::Color(153, 50, 204))
-      );
+      rec.log("matches/image/edges",
+              rerun::LineStrips2D(match_edges)
+                  .with_radii(0.1f)
+                  .with_colors(rerun::Color(153, 50, 204)));
     }
   }
 
