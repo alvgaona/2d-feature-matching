@@ -1,6 +1,6 @@
 # 2D Feature Tracking
 
-![Feature matching with Rerun.io](img/feature-matching-rerun.mp4)
+https://github.com/user-attachments/assets/17f30b1c-abcb-4456-a1d8-4987d51b6fe6
 
 This project demonstrates 2D feature matching using a sequence of images from the KITTI
 dataset. Multiple combinations of keypoint detectors (like FAST, BRISK, ORB, AKAZE,
